@@ -138,6 +138,17 @@ export default function OLXStyleHeader() {
               <Heart className="h-6 w-6" />
             </button>
 
+            {/* Buy Packages button next to wishlist */}
+            <button
+              onClick={() => (window.location.href = "/packages")}
+              className="p-2 hover:bg-red-700 rounded-lg transition-colors text-white hidden md:inline-flex items-center gap-1"
+              aria-label="Buy Packages"
+              title="Buy Packages"
+            >
+              <PackageIcon className="h-5 w-5" />
+              <span className="text-sm hidden lg:inline">Buy Packages</span>
+            </button>
+
             <div className="relative">
               <button
                 onClick={() => (window.location.href = "/notifications")}
