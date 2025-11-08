@@ -7,9 +7,8 @@ import {
   MapPin,
   Clock,
 } from "lucide-react";
-import { Link } from "react-router-dom";
-import { Button } from "./ui/button";
 import { useAuth } from "../hooks/useAuth";
+import { useEffect } from "react";
 import { ROHTAK_AREAS } from "@shared/types";
 import MenuDashboard from "./MenuDashboard";
 import { useNotificationsUnread } from "../hooks/useNotificationsUnread";
