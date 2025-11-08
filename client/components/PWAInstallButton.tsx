@@ -16,6 +16,7 @@ export default function PWAInstallButton() {
   const [bipEvt, setBipEvt] = useState<BeforeInstallPromptEvent | null>(null);
   const [visible, setVisible] = useState(false);
   const [installing, setInstalling] = useState(false);
+  const [showInstallHelp, setShowInstallHelp] = useState(false);
 
   const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent);
 
