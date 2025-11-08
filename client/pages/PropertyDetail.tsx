@@ -225,7 +225,7 @@ function LightboxModalZoom({
   title,
   wmText = "ashishproperties.in",
   wmOpacity = 0.18,
-  wmCopies = 8,
+  wmCopies = 3,
 }: {
   open: boolean;
   onClose: () => void;
