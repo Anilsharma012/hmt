@@ -57,7 +57,7 @@ function Badge({ ap, premium }: { ap?: boolean; premium?: boolean }) {
   if (premium) {
     return (
       <div className="absolute top-2 left-2 bg-gradient-to-r from-orange-500 to-red-600 text-white px-2 py-1 rounded-md text-[10px] md:text-xs font-bold shadow">
-        PREMIUM
+        [premium]
       </div>
     );
   }
