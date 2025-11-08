@@ -8,8 +8,8 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice?: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
 }
 
-// 🔥 Refresh pe hamesha banner dikhana
-const ALWAYS_SHOW_BANNER = true;
+// 🔥 Refresh pe hamesha banner dikhana (session-only dismiss)
+const SESSION_KEY = "ashish_download_dismissed_session";
 
 export default function PWAInstallButton() {
   const { toast } = useToast();
@@ -17,9 +17,16 @@ export default function PWAInstallButton() {
   const [visible, setVisible] = useState(false);
   const [installing, setInstalling] = useState(false);
 
-  // Show banner each refresh
+  const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent);
+
+  // Show banner on every page load unless dismissed for session
   useEffect(() => {
-    if (ALWAYS_SHOW_BANNER) setVisible(true);
+    try {
+      const hidden = sessionStorage.getItem(SESSION_KEY) === "1";
+      if (!hidden) setVisible(true);
+    } catch {
+      setVisible(true);
+    }
   }, []);
 
   // Optional PWA install support
@@ -49,8 +56,17 @@ export default function PWAInstallButton() {
   }, [toast]);
 
   const downloadApk = () => {
-    // Primary action → APK download endpoint
-    window.location.href = "/api/app/download";
+    if (!isAndroid) {
+      try {
+        // user requested an alert message if not on Android
+        window.alert("APK installs only on Android devices. Please open this site on an Android phone to install the APK.");
+      } catch {
+        console.warn("Non-Android device attempted APK download");
+      }
+      return;
+    }
+    // Primary action → legacy download path
+    window.location.href = "/download-apk";
   };
 
   const installPWA = async () => {
@@ -79,16 +95,19 @@ export default function PWAInstallButton() {
     }
   };
 
-  const dismiss = () => setVisible(false); // session-only hide
+  const dismiss = () => {
+    try { sessionStorage.setItem(SESSION_KEY, "1"); } catch {}
+    setVisible(false);
+  };
 
   if (!visible) return null;
 
   return (
     // ✅ CENTERED container (safe gap above bottom nav)
     <div className="fixed inset-x-0 bottom-24 sm:bottom-20 z-[60] flex justify-center px-4 pointer-events-none">
-      <div className="w-full max-w-md pointer-events-auto rounded-2xl shadow-xl overflow-hidden">
-        {/* Gradient header background kept */}
-        <div className="bg-gradient-to-r from-[#C70000] to-[#A50000] text-white">
+      <div className="w-full max-w-[420px] pointer-events-auto rounded-2xl shadow-xl overflow-hidden">
+        {/* Gradient header background */}
+        <div className="bg-gradient-to-r from-[#C70000] to-[#A50000] text-white rounded-2xl">
           <div className="p-4 md:p-5">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-3 flex-1">
@@ -100,7 +119,7 @@ export default function PWAInstallButton() {
                     Get the Ashish Properties App
                   </h3>
                   <p className="text-xs text-red-100">
-                    Click to download the Android app
+                    {isAndroid ? "Tap to download the Android app" : "APK installs only on Android"}
                   </p>
                 </div>
               </div>
@@ -120,7 +139,7 @@ export default function PWAInstallButton() {
               onClick={downloadApk}
               disabled={installing}
               size="sm"
-              className="w-full bg-white text-[#C70000] hover:bg-gray-100 font-bold text-base py-6 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full bg-white text-[#C70000] hover:bg-gray-100 font-bold text-base py-4 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               <Download className="h-5 w-5 mr-2" />
               Download App
