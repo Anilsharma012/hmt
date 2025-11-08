@@ -100,7 +100,14 @@ export default function OLXStyleHeader() {
           </div>
 
           {/* Actions: Heart (wishlist) to the LEFT of Bell (notifications) */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
+            {/* Buy Packages button near heart */}
+            <Link to="/packages" className="hidden md:inline-flex">
+              <Button size="sm" className="bg-white text-[#C70000] hover:opacity-95">
+                Buy Packages
+              </Button>
+            </Link>
+
             <button
               onClick={handleFavoritesClick}
               className="p-2 hover:bg-red-700 rounded-lg transition-colors text-white"
