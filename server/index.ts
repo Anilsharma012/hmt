@@ -1550,7 +1550,7 @@ app.use("/api/payments/razorpay", requireBuyer, razorpayRoutes);
   app.get("/api/app/download", downloadAPK);
   // Legacy path support: redirect to API download
   app.get("/download-apk", (req, res) => res.redirect(302, "/api/app/download"));
-  app.post("/api/admin/app/upload", authenticateToken, requireAdmin, uploadAPK);
+  app.post("/api/admin/app/upload", authenticateToken, requireAdmin, apkUploadMiddleware, uploadAPK);
   app.get(
     "/api/admin/app/stats",
     authenticateToken,
