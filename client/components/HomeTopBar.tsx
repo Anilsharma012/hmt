@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
  * - On md+ screens: badge + wordmark
  * - Falls back to text if logo image missing
  */
-import React, { useEffect, useState } from "react";
 
 export default function HomeTopBar() {
   const [src, setSrc] = useState<string | null>(null);
