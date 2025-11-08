@@ -158,7 +158,7 @@ const notify = (msg: string, type: "success" | "error" = "success") => {
 ========================================================= */
 function WatermarkLayer({
   text,
-  copies = 8,
+  copies = 3,
   opacity = 0.18,
 }: {
   text: string;
