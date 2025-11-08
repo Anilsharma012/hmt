@@ -376,7 +376,7 @@ function PreviewImageWithMarks({
   title,
   watermarkText = "ashishproperties.in",
   watermarkOpacity = 0.18,
-  watermarkCopies = 8,
+  watermarkCopies = 3,
   onOpenModal,
 }: {
   images: any[];
