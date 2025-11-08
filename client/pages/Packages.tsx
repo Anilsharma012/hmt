@@ -40,7 +40,27 @@ export default function PackagesPage() {
       }
 
       if (data && data.success && Array.isArray(data.data)) {
-        setPackages(data.data);
+        const fetched = data.data as AdPackage[];
+        const personalConsultation: AdPackage = {
+          _id: "personal-consultation",
+          name: "Personal Consultation",
+          description: "One-on-one personal consultation for listing strategy, pricing and visibility. Contact 9896095599 (10:00 AM - 6:00 PM).",
+          price: 0,
+          duration: 1,
+          features: [
+            "Direct phone consultation",
+            "Listing review and optimization",
+            "Pricing strategy",
+            "Priority support (10:00 AM - 6:00 PM)",
+          ],
+          featuresHtml: [],
+          premium: false,
+          type: "custom",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          // price 0 indicates free selection - user will be advised to call
+        } as any;
+        setPackages([...fetched, personalConsultation]);
       } else {
         setError("Invalid data format received");
         setPackages([]);
