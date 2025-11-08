@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Search,
   Heart,
@@ -8,13 +9,14 @@ import {
   Clock,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
-import { useEffect } from "react";
 import { ROHTAK_AREAS } from "@shared/types";
 import MenuDashboard from "./MenuDashboard";
 import { useNotificationsUnread } from "../hooks/useNotificationsUnread";
 
 export default function OLXStyleHeader() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, token, isAuthenticated } = useAuth();
+  const [pendingCount, setPendingCount] = useState<number>(0);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +30,31 @@ export default function OLXStyleHeader() {
     }
   });
   const unread = useNotificationsUnread();
+
+  useEffect(() => {
+    let mounted = true;
+    const loadPending = async () => {
+      try {
+        if (!user || user.userType !== "admin") return;
+        const res = await fetch("/api/admin/properties/pending", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (!res.ok) return;
+        const json = await res.json();
+        if (mounted && json && Array.isArray(json.data)) {
+          setPendingCount(json.data.length);
+        }
+      } catch (e) {
+        // ignore
+      }
+    };
+    loadPending();
+    const id = setInterval(loadPending, 60_000);
+    return () => {
+      mounted = false;
+      clearInterval(id);
+    };
+  }, [token, user]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(searchQuery.trim()), 250);
