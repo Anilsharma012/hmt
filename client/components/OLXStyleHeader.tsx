@@ -44,8 +44,12 @@ export default function OLXStyleHeader() {
         const json = await res.json();
         if (mounted && json && json.data) {
           const d = json.data;
-          setPendingCount(typeof d.pendingCount === 'number' ? d.pendingCount : 0);
-          setResubmittedCount(typeof d.resubmittedCount === 'number' ? d.resubmittedCount : 0);
+          setPendingCount(
+            typeof d.pendingCount === "number" ? d.pendingCount : 0,
+          );
+          setResubmittedCount(
+            typeof d.resubmittedCount === "number" ? d.resubmittedCount : 0,
+          );
         }
       } catch (e) {
         // ignore
@@ -125,7 +129,9 @@ export default function OLXStyleHeader() {
 
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-white">Ashish Properties</div>
+            <div className="text-2xl font-bold text-white">
+              Ashish Properties
+            </div>
           </div>
 
           {/* Actions: Heart (wishlist) to the LEFT of Bell (notifications) */}
@@ -164,10 +170,20 @@ export default function OLXStyleHeader() {
               </button>
 
               {user && user.userType === "admin" && resubmittedCount > 0 && (
-                <span title={`${resubmittedCount} properties resubmitted for review`} className="absolute -top-2 -right-11 bg-red-500 text-white text-xs font-semibold rounded-full h-5 min-w-[1.25rem] px-2 flex items-center justify-center">{resubmittedCount>9? '9+': resubmittedCount}</span>
+                <span
+                  title={`${resubmittedCount} properties resubmitted for review`}
+                  className="absolute -top-2 -right-11 bg-red-500 text-white text-xs font-semibold rounded-full h-5 min-w-[1.25rem] px-2 flex items-center justify-center"
+                >
+                  {resubmittedCount > 9 ? "9+" : resubmittedCount}
+                </span>
               )}
               {user && user.userType === "admin" && pendingCount > 0 && (
-                <span title={`${pendingCount} properties pending approval`} className="absolute -top-2 -right-7 bg-yellow-400 text-black text-xs font-semibold rounded-full h-6 min-w-[1.25rem] px-2 flex items-center justify-center">{pendingCount>9? '9+': pendingCount}</span>
+                <span
+                  title={`${pendingCount} properties pending approval`}
+                  className="absolute -top-2 -right-7 bg-yellow-400 text-black text-xs font-semibold rounded-full h-6 min-w-[1.25rem] px-2 flex items-center justify-center"
+                >
+                  {pendingCount > 9 ? "9+" : pendingCount}
+                </span>
               )}
             </div>
           </div>
@@ -291,16 +307,28 @@ export default function OLXStyleHeader() {
             ) : (
               <div className="p-4">
                 <nav className="space-y-2 mb-8">
-                  <a href="/" className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700">
+                  <a
+                    href="/"
+                    className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700"
+                  >
                     Home
                   </a>
-                  <a href="/categories" className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700">
+                  <a
+                    href="/categories"
+                    className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700"
+                  >
                     Categories
                   </a>
-                  <a href="/post-property" className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700">
+                  <a
+                    href="/post-property"
+                    className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700"
+                  >
                     Sell
                   </a>
-                  <a href="/my-account" className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700">
+                  <a
+                    href="/my-account"
+                    className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700"
+                  >
                     My Account
                   </a>
                 </nav>

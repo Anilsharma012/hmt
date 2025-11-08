@@ -1,6 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../components/ui/button";
-import { Check, Crown, Star, Eye, Clock, ArrowRight, Package as PackageIcon } from "lucide-react";
+import {
+  Check,
+  Crown,
+  Star,
+  Eye,
+  Clock,
+  ArrowRight,
+  Package as PackageIcon,
+} from "lucide-react";
 import type { AdPackage } from "@shared/types";
 import { useNavigate } from "react-router-dom";
 
@@ -34,7 +42,9 @@ export default function PackagesPage() {
       }
 
       if (!data) {
-        const res = await fetch("/api/plans?isActive=true", { credentials: "include" });
+        const res = await fetch("/api/plans?isActive=true", {
+          credentials: "include",
+        });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         data = await res.json();
       }
@@ -44,7 +54,8 @@ export default function PackagesPage() {
         const personalConsultation: AdPackage = {
           _id: "personal-consultation",
           name: "Personal Consultation",
-          description: "One-on-one personal consultation for listing strategy, pricing and visibility. Contact 9896095599 (10:00 AM - 6:00 PM).",
+          description:
+            "One-on-one personal consultation for listing strategy, pricing and visibility. Contact 9896095599 (10:00 AM - 6:00 PM).",
           price: 0,
           duration: 1,
           features: [
@@ -97,20 +108,26 @@ export default function PackagesPage() {
         <h1 className="text-2xl font-bold">Advertisement Packages</h1>
       </div>
 
-      {error && (
-        <div className="mb-4 text-red-600">{error}</div>
-      )}
+      {error && <div className="mb-4 text-red-600">{error}</div>}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {packages.map((pkg) => (
-          <div key={pkg._id} className={`rounded-xl border p-5 ${pkg.type === 'premium' ? 'border-yellow-300' : 'border-gray-200'}`}>
+          <div
+            key={pkg._id}
+            className={`rounded-xl border p-5 ${pkg.type === "premium" ? "border-yellow-300" : "border-gray-200"}`}
+          >
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-xl font-semibold">{pkg.name}</h3>
-                <div className="text-sm text-gray-600">{pkg.duration} days • {pkg.price === 0 ? 'Free' : `₹${pkg.price}`}</div>
+                <div className="text-sm text-gray-600">
+                  {pkg.duration} days •{" "}
+                  {pkg.price === 0 ? "Free" : `₹${pkg.price}`}
+                </div>
               </div>
               {pkg.premium && (
-                <div className="bg-yellow-400 text-white px-3 py-1 rounded-full text-sm font-semibold">Premium</div>
+                <div className="bg-yellow-400 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                  Premium
+                </div>
               )}
             </div>
 
@@ -128,7 +145,13 @@ export default function PackagesPage() {
               </ul>
             </div>
 
-            <Button onClick={() => goCheckout(pkg._id)} className="w-full bg-[#C70000] text-white">{pkg.price === 0 ? 'Choose (Free)' : `Choose for ₹${pkg.price}`} <ArrowRight className="h-4 w-4 ml-2" /></Button>
+            <Button
+              onClick={() => goCheckout(pkg._id)}
+              className="w-full bg-[#C70000] text-white"
+            >
+              {pkg.price === 0 ? "Choose (Free)" : `Choose for ₹${pkg.price}`}{" "}
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
           </div>
         ))}
       </div>

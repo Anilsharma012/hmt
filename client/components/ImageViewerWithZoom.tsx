@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { ZoomIn, ZoomOut, Download, X, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ZoomIn,
+  ZoomOut,
+  Download,
+  X,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import Watermark from "./Watermark";
 
@@ -46,7 +53,9 @@ export default function ImageViewerWithZoom({
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const killers = root.querySelectorAll<HTMLElement>("[style*=\"data:image/svg+xml\"]");
+    const killers = root.querySelectorAll<HTMLElement>(
+      '[style*="data:image/svg+xml"]',
+    );
     killers.forEach((el) => {
       el.style.backgroundImage = "none";
       el.style.background = "transparent";
@@ -103,7 +112,8 @@ export default function ImageViewerWithZoom({
     }
   };
 
-  const nextImage = () => currentIndex < images.length - 1 && onIndexChange(currentIndex + 1);
+  const nextImage = () =>
+    currentIndex < images.length - 1 && onIndexChange(currentIndex + 1);
   const prevImage = () => currentIndex > 0 && onIndexChange(currentIndex - 1);
 
   // IMG + watermark same transform so they zoom together
@@ -113,27 +123,49 @@ export default function ImageViewerWithZoom({
         transform: `scale(${zoomLevel}) translate(${position.x / zoomLevel}px, ${position.y / zoomLevel}px)`,
         transformOrigin: "center",
         transition: "transform 120ms ease",
-      } as React.CSSProperties),
-    [zoomLevel, position.x, position.y]
+      }) as React.CSSProperties,
+    [zoomLevel, position.x, position.y],
   );
 
   return (
     <div ref={rootRef} className="relative w-full h-full">
       {/* Controls */}
       <div className="absolute top-3 right-3 z-20 flex gap-2">
-        <Button size="sm" variant="secondary" onClick={handleZoomIn} disabled={zoomLevel >= 3} className="bg-white/90 hover:bg-white shadow-lg">
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={handleZoomIn}
+          disabled={zoomLevel >= 3}
+          className="bg-white/90 hover:bg-white shadow-lg"
+        >
           <ZoomIn className="h-4 w-4" />
         </Button>
-        <Button size="sm" variant="secondary" onClick={handleZoomOut} disabled={zoomLevel <= 1} className="bg-white/90 hover:bg-white shadow-lg">
+        <Button
+          size="sm"
+          variant="secondary"
+          onClick={handleZoomOut}
+          disabled={zoomLevel <= 1}
+          className="bg-white/90 hover:bg-white shadow-lg"
+        >
           <ZoomOut className="h-4 w-4" />
         </Button>
         {isZoomed && (
-          <Button size="sm" variant="secondary" onClick={handleResetZoom} className="bg-white/90 hover:bg-white shadow-lg">
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={handleResetZoom}
+            className="bg-white/90 hover:bg-white shadow-lg"
+          >
             <X className="h-4 w-4" />
           </Button>
         )}
         {allowDownload && (
-          <Button size="sm" variant="secondary" onClick={handleDownload} className="bg-white/90 hover:bg-white shadow-lg">
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={handleDownload}
+            className="bg-white/90 hover:bg-white shadow-lg"
+          >
             <Download className="h-4 w-4" />
           </Button>
         )}
@@ -146,23 +178,40 @@ export default function ImageViewerWithZoom({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        style={{ cursor: zoomLevel > 1 ? (isDragging ? "grabbing" : "grab") : "default" }}
+        style={{
+          cursor:
+            zoomLevel > 1 ? (isDragging ? "grabbing" : "grab") : "default",
+        }}
       >
         {/* Transform target: IMG + Watermark together */}
         <div className="absolute inset-0" style={transformStyle}>
-          <img src={currentImage} alt={title} className="w-full h-full object-contain select-none" draggable={false} />
+          <img
+            src={currentImage}
+            alt={title}
+            className="w-full h-full object-contain select-none"
+            draggable={false}
+          />
 
           {/* Watermark (always ≤3; 'pattern' → tiled) */}
           {watermarkEnabled && (
             <>
               {watermarkPosition === "pattern" && (
-                <Watermark variant="tiled" count={3} text={watermarkText} opacity={Math.min(Math.max(watermarkOpacity, 0), 1)} />
+                <Watermark
+                  variant="tiled"
+                  count={3}
+                  text={watermarkText}
+                  opacity={Math.min(Math.max(watermarkOpacity, 0), 1)}
+                />
               )}
               {watermarkPosition === "center" && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
                   <div
                     className="text-4xl font-bold text-white select-none"
-                    style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)", opacity: watermarkOpacity, whiteSpace: "nowrap" }}
+                    style={{
+                      textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
+                      opacity: watermarkOpacity,
+                      whiteSpace: "nowrap",
+                    }}
                   >
                     {watermarkText}
                   </div>
@@ -170,7 +219,10 @@ export default function ImageViewerWithZoom({
               )}
               {watermarkPosition === "bottom-right" && (
                 <div className="absolute bottom-4 right-4 pointer-events-none z-10">
-                  <div className="px-4 py-2 bg-black/70 text-white rounded-lg text-sm font-semibold select-none" style={{ opacity: watermarkOpacity, whiteSpace: "nowrap" }}>
+                  <div
+                    className="px-4 py-2 bg-black/70 text-white rounded-lg text-sm font-semibold select-none"
+                    style={{ opacity: watermarkOpacity, whiteSpace: "nowrap" }}
+                  >
                     {watermarkText}
                   </div>
                 </div>
@@ -183,10 +235,22 @@ export default function ImageViewerWithZoom({
       {/* Arrows */}
       {images.length > 1 && (
         <>
-          <Button variant="ghost" size="sm" className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white hover:bg-black/60 z-20" onClick={prevImage} disabled={currentIndex === 0}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white hover:bg-black/60 z-20"
+            onClick={prevImage}
+            disabled={currentIndex === 0}
+          >
             <ChevronLeft className="h-5 w-5" />
           </Button>
-          <Button variant="ghost" size="sm" className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white hover:bg-black/60 z-20" onClick={nextImage} disabled={currentIndex === images.length - 1}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white hover:bg-black/60 z-20"
+            onClick={nextImage}
+            disabled={currentIndex === images.length - 1}
+          >
             <ChevronRight className="h-5 w-5" />
           </Button>
         </>

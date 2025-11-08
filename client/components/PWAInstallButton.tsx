@@ -18,7 +18,8 @@ export default function PWAInstallButton() {
   const [installing, setInstalling] = useState(false);
   const [showInstallHelp, setShowInstallHelp] = useState(false);
 
-  const isAndroid = typeof navigator !== "undefined" && /android/i.test(navigator.userAgent);
+  const isAndroid =
+    typeof navigator !== "undefined" && /android/i.test(navigator.userAgent);
 
   // Show banner on every page load unless dismissed for session
   useEffect(() => {
@@ -60,7 +61,9 @@ export default function PWAInstallButton() {
     if (!isAndroid) {
       try {
         // user requested an alert message if not on Android
-        window.alert("APK installs only on Android devices. Please open this site on an Android phone to install the APK.");
+        window.alert(
+          "APK installs only on Android devices. Please open this site on an Android phone to install the APK.",
+        );
       } catch {
         console.warn("Non-Android device attempted APK download");
       }
@@ -78,7 +81,10 @@ export default function PWAInstallButton() {
       console.log("APK download started via UI");
     } catch (e) {
       console.error("Failed to start APK download:", e);
-      toast({ title: "Download failed", description: "Could not start APK download. Please try again." });
+      toast({
+        title: "Download failed",
+        description: "Could not start APK download. Please try again.",
+      });
     }
   };
 
@@ -109,7 +115,9 @@ export default function PWAInstallButton() {
   };
 
   const dismiss = () => {
-    try { sessionStorage.setItem(SESSION_KEY, "1"); } catch {}
+    try {
+      sessionStorage.setItem(SESSION_KEY, "1");
+    } catch {}
     setVisible(false);
   };
 
@@ -132,7 +140,9 @@ export default function PWAInstallButton() {
                     Get the Ashish Properties App
                   </h3>
                   <p className="text-xs text-red-100">
-                    {isAndroid ? "Tap to download the Android app" : "APK installs only on Android"}
+                    {isAndroid
+                      ? "Tap to download the Android app"
+                      : "APK installs only on Android"}
                   </p>
                 </div>
               </div>
@@ -176,12 +186,28 @@ export default function PWAInstallButton() {
                 <ol className="list-decimal list-inside space-y-1">
                   <li>Open your phone's Downloads app or Files app.</li>
                   <li>Tap on "AashishProperty.apk" to begin installation.</li>
-                  <li>If prompted, allow "Install unknown apps" for your browser (Settings → Install unknown apps → Allow).</li>
-                  <li>After installation, open the Ashish Properties app from your launcher.</li>
+                  <li>
+                    If prompted, allow "Install unknown apps" for your browser
+                    (Settings → Install unknown apps → Allow).
+                  </li>
+                  <li>
+                    After installation, open the Ashish Properties app from your
+                    launcher.
+                  </li>
                 </ol>
                 <div className="mt-3 flex gap-2">
-                  <a href="/api/app/download" className="flex-1 text-center px-3 py-2 bg-[#C70000] text-white rounded">Download again</a>
-                  <button onClick={() => setShowInstallHelp(false)} className="px-3 py-2 border rounded">Close</button>
+                  <a
+                    href="/api/app/download"
+                    className="flex-1 text-center px-3 py-2 bg-[#C70000] text-white rounded"
+                  >
+                    Download again
+                  </a>
+                  <button
+                    onClick={() => setShowInstallHelp(false)}
+                    className="px-3 py-2 border rounded"
+                  >
+                    Close
+                  </button>
                 </div>
               </div>
             )}

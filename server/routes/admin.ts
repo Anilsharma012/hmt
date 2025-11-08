@@ -258,22 +258,28 @@ export const getAdminNotificationCounts: RequestHandler = async (req, res) => {
   try {
     const db = getDatabase();
 
-    const pendingCount = await db.collection("properties").countDocuments({ approvalStatus: "pending" });
+    const pendingCount = await db
+      .collection("properties")
+      .countDocuments({ approvalStatus: "pending" });
 
     // Approximate resubmitted: pending properties that have been updated after creation
-    const resubmittedCount = await db
-      .collection("properties")
-      .countDocuments({
-        approvalStatus: "pending",
-        $expr: { $gt: ["$updatedAt", "$createdAt"] },
-      });
+    const resubmittedCount = await db.collection("properties").countDocuments({
+      approvalStatus: "pending",
+      $expr: { $gt: ["$updatedAt", "$createdAt"] },
+    });
 
-    const reportsPending = await db.collection("reports").countDocuments({ status: "pending" }).catch(() => 0);
+    const reportsPending = await db
+      .collection("reports")
+      .countDocuments({ status: "pending" })
+      .catch(() => 0);
     const bankTransfersPending = await db
       .collection("bank_transfers")
       .countDocuments({ status: "pending" })
       .catch(() => 0);
-    const reviewsPending = await db.collection("reviews").countDocuments({ status: "pending" }).catch(() => 0);
+    const reviewsPending = await db
+      .collection("reviews")
+      .countDocuments({ status: "pending" })
+      .catch(() => 0);
 
     const response: ApiResponse<{
       pendingCount: number;
@@ -283,13 +289,24 @@ export const getAdminNotificationCounts: RequestHandler = async (req, res) => {
       reviewsPending: number;
     }> = {
       success: true,
-      data: { pendingCount, resubmittedCount, reportsPending, bankTransfersPending, reviewsPending },
+      data: {
+        pendingCount,
+        resubmittedCount,
+        reportsPending,
+        bankTransfersPending,
+        reviewsPending,
+      },
     };
 
     res.json(response);
   } catch (error) {
     console.error("Error fetching admin notification counts:", error);
-    res.status(500).json({ success: false, error: "Failed to fetch admin notification counts" });
+    res
+      .status(500)
+      .json({
+        success: false,
+        error: "Failed to fetch admin notification counts",
+      });
   }
 };
 

@@ -304,7 +304,8 @@ function LightboxModalZoom({
     if (open && touchStart.current && zoom === 1) {
       const dx = e.changedTouches[0].clientX - touchStart.current.x;
       if (dx < -50) onIndexChange((index + 1) % images.length);
-      else if (dx > 50) onIndexChange((index - 1 + images.length) % images.length);
+      else if (dx > 50)
+        onIndexChange((index - 1 + images.length) % images.length);
     }
     dragStart.current = null;
     touchStart.current = null;
@@ -564,7 +565,7 @@ export default function PropertyDetail() {
         if (retryCount < 2) {
           setTimeout(
             () => fetchProperty(retryCount + 1),
-            1000 * (retryCount + 1)
+            1000 * (retryCount + 1),
           );
           return;
         } else
@@ -652,7 +653,7 @@ export default function PropertyDetail() {
       setIsLiked((p) => !p);
       const res = await apiWrite(
         `favorites/${id}`,
-        isLiked ? "DELETE" : "POST"
+        isLiked ? "DELETE" : "POST",
       );
       if (!res?.ok || res?.json?.success === false) {
         setIsLiked((p) => !p);
@@ -710,7 +711,7 @@ export default function PropertyDetail() {
   const handleWhatsApp = (phoneNumber: string) => {
     const message = `Hi, I'm interested in your property: ${property?.title}`;
     const url = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-      message
+      message,
     )}`;
     window.open(url, "_blank");
   };
@@ -933,7 +934,9 @@ export default function PropertyDetail() {
                     index={currentImageIndex}
                     onChange={setCurrentImageIndex}
                     title={property.title}
-                    watermarkText={watermarkSettings?.text || "ashishproperties.in"}
+                    watermarkText={
+                      watermarkSettings?.text || "ashishproperties.in"
+                    }
                     watermarkOpacity={
                       typeof watermarkSettings?.opacity === "number"
                         ? watermarkSettings.opacity
@@ -1031,16 +1034,23 @@ export default function PropertyDetail() {
                     }
                   />
                   <KV k="Floor" v={property.specifications?.floor} />
-                  <KV k="Total Floors" v={property.specifications?.totalFloors} />
+                  <KV
+                    k="Total Floors"
+                    v={property.specifications?.totalFloors}
+                  />
                   <KV k="Facing" v={property.specifications?.facing} />
                   <KV k="Furnishing" v={property.specifications?.furnishing} />
                   <KV k="Property Age" v={property.specifications?.age} />
                   <KV k="Ownership" v={property.specifications?.ownership} />
-                  <KV k="Maintenance" v={property.specifications?.maintenance} />
+                  <KV
+                    k="Maintenance"
+                    v={property.specifications?.maintenance}
+                  />
                   <KV
                     k="Dimensions"
                     v={
-                      (property.dimensions?.length || property.dimensions?.width) &&
+                      (property.dimensions?.length ||
+                        property.dimensions?.width) &&
                       `${property.dimensions?.length || ""}${
                         property.dimensions?.length ? " x " : ""
                       }${property.dimensions?.width || ""} ${
@@ -1055,13 +1065,16 @@ export default function PropertyDetail() {
                       `${property.details.plotArea} ${property.details?.plotUnit || ""}`
                     }
                   />
-                  <KV k="RERA" v={property.meta?.reraId || property.details?.reraId} />
+                  <KV
+                    k="RERA"
+                    v={property.meta?.reraId || property.details?.reraId}
+                  />
                   <KV
                     k="Posted On"
                     v={
                       (property.meta?.postedOn || property.createdAt) &&
                       new Date(
-                        property.meta?.postedOn || (property.createdAt as any)
+                        property.meta?.postedOn || (property.createdAt as any),
                       ).toLocaleDateString()
                     }
                   />
@@ -1077,7 +1090,8 @@ export default function PropertyDetail() {
                 </div>
 
                 {!!(
-                  property.amenities?.length || property.details?.amenities?.length
+                  property.amenities?.length ||
+                  property.details?.amenities?.length
                 ) && (
                   <>
                     <h4 className="mt-4 text-sm font-semibold text-gray-900 mb-2">
@@ -1113,7 +1127,9 @@ export default function PropertyDetail() {
                           <Chip key={`dn-${i}`}>{n}</Chip>
                         ))}
                       {(property.tags || property.details?.tags || []).map(
-                        (t: string, i: number) => <Chip key={`t-${i}`}>{t}</Chip>
+                        (t: string, i: number) => (
+                          <Chip key={`t-${i}`}>{t}</Chip>
+                        ),
                       )}
                     </div>
                   </>
@@ -1255,7 +1271,7 @@ export default function PropertyDetail() {
                       handleWhatsApp(
                         property.contactInfo?.whatsappNumber ||
                           property.contactInfo?.phone ||
-                          ""
+                          "",
                       )
                     }
                   >
@@ -1294,7 +1310,7 @@ export default function PropertyDetail() {
                       handleWhatsApp(
                         property.contactInfo?.whatsappNumber ||
                           property.contactInfo?.phone ||
-                          ""
+                          "",
                       )
                     }
                   >
