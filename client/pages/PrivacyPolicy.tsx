@@ -136,7 +136,7 @@ export default function PrivacyPolicy() {
               9) Contact / Grievance Officer
             </h2>
             <p className="text-gray-700">
-              Email: privacy@ashishproperties.in • Phone: +91-7419100032 •
+              Email: privacy@ashishproperties.in • Phone: +91-9991889994 •
               Address: Rohtak, Haryana, India
             </p>
           </section>
