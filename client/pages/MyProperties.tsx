@@ -94,6 +94,7 @@ interface PropertyStats {
 export default function MyProperties() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [properties, setProperties] = useState<Property[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -131,6 +132,19 @@ export default function MyProperties() {
     }
     fetchProperties();
   }, [user, navigate]);
+
+  useEffect(() => {
+    const status = searchParams.get("status");
+    const sort = searchParams.get("sort");
+
+    if (status && ["pending", "approved", "rejected"].includes(status)) {
+      setStatusFilter(status as "pending" | "approved" | "rejected");
+    }
+
+    if (sort && ["newest", "oldest", "price", "views"].includes(sort)) {
+      setSortBy(sort as "newest" | "oldest" | "price" | "views");
+    }
+  }, [searchParams]);
 
   const fetchProperties = async () => {
     try {
