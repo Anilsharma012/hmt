@@ -31,6 +31,7 @@ export interface Property {
   amenities: string[];
   ownerId: string;
   ownerType: "seller" | "agent";
+  isAdminPosted?: boolean; // Property posted through admin panel
   contactInfo: {
     name: string;
     phone: string;
