@@ -342,6 +342,32 @@ export const createProperty: RequestHandler = async (req, res) => {
       packageId: propertyData.packageId || null,
     });
 
+    // Free post limit enforcement (default: 5 free posts per 30 days)
+    const FREE_POST_LIMIT = process.env.FREE_POST_LIMIT ? Number(process.env.FREE_POST_LIMIT) : 5;
+    const FREE_POST_PERIOD_DAYS = process.env.FREE_POST_PERIOD_DAYS ? Number(process.env.FREE_POST_PERIOD_DAYS) : 30;
+
+    // If no package is provided (free listing), check user's free posts in the period
+    if (!propertyData.packageId) {
+      const periodStart = new Date(Date.now() - FREE_POST_PERIOD_DAYS * 24 * 60 * 60 * 1000);
+      const userIdStr = String(userId);
+      const freePostsCount = await db.collection("properties").countDocuments({
+        ownerId: userIdStr,
+        createdAt: { $gte: periodStart },
+        $or: [
+          { packageId: { $exists: false } },
+          { packageId: null },
+          { isPaid: false },
+        ],
+      });
+
+      if (freePostsCount >= FREE_POST_LIMIT) {
+        return res.status(403).json({
+          success: false,
+          error: `Free listing limit reached: ${FREE_POST_LIMIT} free posts allowed per ${FREE_POST_PERIOD_DAYS} days.`,
+        });
+      }
+    }
+
     const result = await db.collection("properties").insertOne(propertyData);
 
     const response: ApiResponse<{ _id: string }> = {
