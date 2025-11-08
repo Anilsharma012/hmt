@@ -48,11 +48,11 @@ export default function HomeTopBar() {
           <img
             src={src}
             alt="Ashish Properties"
-            className="h-8 md:h-9 w-auto select-none drop-shadow-md"
+            className="hidden md:inline-block h-8 md:h-9 w-auto select-none drop-shadow-md"
             draggable={false}
           />
         ) : (
-          <span className="h-8 w-8 md:h-9 md:w-9 rounded-full bg-white/90 text-red-700 font-extrabold flex items-center justify-center shadow-sm">
+          <span className="hidden md:inline-flex h-8 w-8 md:h-9 md:w-9 rounded-full bg-white/90 text-red-700 font-extrabold flex items-center justify-center shadow-sm">
             AP
           </span>
         )}
