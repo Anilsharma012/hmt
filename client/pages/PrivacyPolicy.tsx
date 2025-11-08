@@ -1,7 +1,6 @@
 import StaticFooter from "@/components/StaticFooter";
 import { useEffect } from "react";
 
-
 export default function PrivacyPolicy() {
   useEffect(() => {
     const title = "Privacy Policy | Ashish Property";
@@ -152,7 +151,7 @@ export default function PrivacyPolicy() {
           </section>
         </article>
       </main>
-<StaticFooter/>
+      <StaticFooter />
     </div>
   );
 }

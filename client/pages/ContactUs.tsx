@@ -33,9 +33,12 @@ export default function ContactUs() {
   const { isAuthenticated, token, user } = useAuth();
   const { toast } = useToast();
 
-  const [contactEmail, setContactEmail] = useState<string>("contact@aashishproperty.com");
+  const [contactEmail, setContactEmail] = useState<string>(
+    "contact@aashishproperty.com",
+  );
   const [contactPhone, setContactPhone] = useState<string>("+91 9991889994");
-  const [contactAddress, setContactAddress] = useState<string>("Rohtak, Haryana");
+  const [contactAddress, setContactAddress] =
+    useState<string>("Rohtak, Haryana");
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -77,7 +80,10 @@ export default function ContactUs() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!subject.trim() || !message.trim()) {
-      toast({ title: "Please fill subject and message", variant: "destructive" });
+      toast({
+        title: "Please fill subject and message",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -100,7 +106,10 @@ export default function ContactUs() {
         });
         const data = await res.json();
         if (res.ok && data?.success) {
-          toast({ title: "Message sent", description: "Our team will contact you soon." });
+          toast({
+            title: "Message sent",
+            description: "Our team will contact you soon.",
+          });
           setMessage("");
         } else {
           throw new Error(data?.error || "Failed to send");
@@ -146,14 +155,18 @@ export default function ContactUs() {
                 <Phone className="h-5 w-5 text-[#C70000] mt-0.5" />
                 <div>
                   <div className="font-medium">Phone</div>
-                  <a className="text-[#C70000]" href={`tel:${contactPhone}`}>{contactPhone}</a>
+                  <a className="text-[#C70000]" href={`tel:${contactPhone}`}>
+                    {contactPhone}
+                  </a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <Mail className="h-5 w-5 text-[#C70000] mt-0.5" />
                 <div>
                   <div className="font-medium">Email</div>
-                  <a className="text-[#C70000]" href={`mailto:${contactEmail}`}>{contactEmail}</a>
+                  <a className="text-[#C70000]" href={`mailto:${contactEmail}`}>
+                    {contactEmail}
+                  </a>
                 </div>
               </div>
               <div className="flex items-start gap-3">
@@ -177,13 +190,20 @@ export default function ContactUs() {
         <section className="md:col-span-3">
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h1 className="text-2xl font-bold mb-1">Contact Us</h1>
-            <p className="text-gray-600 mb-6">Send us a message and we’ll get back to you shortly.</p>
+            <p className="text-gray-600 mb-6">
+              Send us a message and we’ll get back to you shortly.
+            </p>
 
             <form onSubmit={onSubmit} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="name">Name</Label>
-                  <Input id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" />
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                  />
                 </div>
                 <div>
                   <Label htmlFor="email">Email</Label>
@@ -197,32 +217,60 @@ export default function ContactUs() {
                 </div>
                 <div>
                   <Label htmlFor="phone">Phone</Label>
-                  <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 XXXXX XXXXX" />
+                  <Input
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+91 XXXXX XXXXX"
+                  />
                 </div>
                 <div>
                   <Label htmlFor="subject">Subject</Label>
-                  <Input id="subject" value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="Subject" />
+                  <Input
+                    id="subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder="Subject"
+                  />
                 </div>
               </div>
 
               <div>
                 <Label htmlFor="message">Message</Label>
-                <Textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} rows={6} placeholder="How can we help you?" />
+                <Textarea
+                  id="message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows={6}
+                  placeholder="How can we help you?"
+                />
               </div>
 
               <div className="flex items-center gap-3">
-                <Button type="submit" disabled={submitting} className="bg-[#C70000] hover:bg-[#A60000]">
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  className="bg-[#C70000] hover:bg-[#A60000]"
+                >
                   <Send className="h-4 w-4 mr-2" />
-                  {isAuthenticated ? (submitting ? "Sending..." : "Send Message") : "Open Email App"}
+                  {isAuthenticated
+                    ? submitting
+                      ? "Sending..."
+                      : "Send Message"
+                    : "Open Email App"}
                 </Button>
-                <span className="text-xs text-gray-500">{isAuthenticated ? "Creates a support ticket" : "You’re not logged in; we’ll open your email app to send"}</span>
+                <span className="text-xs text-gray-500">
+                  {isAuthenticated
+                    ? "Creates a support ticket"
+                    : "You’re not logged in; we’ll open your email app to send"}
+                </span>
               </div>
             </form>
           </div>
         </section>
       </div>
 
-     <StaticFooter/>
+      <StaticFooter />
     </div>
   );
 }

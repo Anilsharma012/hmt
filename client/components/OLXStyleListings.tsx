@@ -55,7 +55,9 @@ export default function OLXStyleListings() {
   const [favoritesLoaded, setFavoritesLoaded] = useState(false);
 
   const [enquiryModalOpen, setEnquiryModalOpen] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
+    null,
+  );
 
   /* --------------------------- Helpers --------------------------- */
   const notify = (msg: string, type: "success" | "error" = "success") => {
@@ -87,7 +89,7 @@ export default function OLXStyleListings() {
   };
 
   const apiGet = async (path: string) => {
-    const anyWin = (window as any);
+    const anyWin = window as any;
     const opts = {
       headers: buildAuthHeaders(),
       credentials: "include" as const,
@@ -108,7 +110,7 @@ export default function OLXStyleListings() {
   };
 
   const apiWrite = async (path: string, method: "POST" | "DELETE") => {
-    const anyWin = (window as any);
+    const anyWin = window as any;
     const opts = {
       method,
       headers: buildAuthHeaders(),
@@ -198,7 +200,9 @@ export default function OLXStyleListings() {
         title: "3 BHK Flat for Sale in Rohtak",
         price: 4500000,
         location: { city: "Rohtak", state: "Haryana" },
-        images: ["https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800"],
+        images: [
+          "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800",
+        ],
         propertyType: "apartment",
         createdAt: new Date().toISOString(),
         contactInfo: { name: "Rajesh Kumar" },
@@ -208,7 +212,9 @@ export default function OLXStyleListings() {
         title: "2 BHK Independent House",
         price: 3200000,
         location: { city: "Rohtak", state: "Haryana" },
-        images: ["https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800"],
+        images: [
+          "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800",
+        ],
         propertyType: "house",
         createdAt: new Date(Date.now() - 86400000).toISOString(),
         contactInfo: { name: "Priya Sharma" },
@@ -218,7 +224,9 @@ export default function OLXStyleListings() {
         title: "Commercial Shop for Rent",
         price: 25000,
         location: { city: "Rohtak", state: "Haryana" },
-        images: ["https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800"],
+        images: [
+          "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800",
+        ],
         propertyType: "commercial",
         createdAt: new Date(Date.now() - 172800000).toISOString(),
         contactInfo: { name: "Amit Singh" },
@@ -228,7 +236,9 @@ export default function OLXStyleListings() {
         title: "4 BHK Villa with Garden",
         price: 8500000,
         location: { city: "Rohtak", state: "Haryana" },
-        images: ["https://images.unsplash.com/photo-1593696140826-c58b021acf8b?w=800"],
+        images: [
+          "https://images.unsplash.com/photo-1593696140826-c58b021acf8b?w=800",
+        ],
         propertyType: "villa",
         createdAt: new Date(Date.now() - 345600000).toISOString(),
         contactInfo: { name: "Vikash Yadav" },
@@ -241,13 +251,20 @@ export default function OLXStyleListings() {
   const serverToggleFavorite = async (id: string, makeFav: boolean) => {
     try {
       setFavBusy(id);
-      const res = await apiWrite(`favorites/${id}`, makeFav ? "POST" : "DELETE");
+      const res = await apiWrite(
+        `favorites/${id}`,
+        makeFav ? "POST" : "DELETE",
+      );
 
-      const msg = (res?.json?.error || res?.json?.message || "").toString().toLowerCase();
+      const msg = (res?.json?.error || res?.json?.message || "")
+        .toString()
+        .toLowerCase();
 
       if (res.status === 401) {
         const cur = getLocalFavIds();
-        const next = makeFav ? Array.from(new Set([id, ...cur])) : cur.filter((x) => x !== id);
+        const next = makeFav
+          ? Array.from(new Set([id, ...cur]))
+          : cur.filter((x) => x !== id);
         setLocalFavIds(next);
         window.dispatchEvent(new Event("favorites:changed"));
         return true;
@@ -255,8 +272,17 @@ export default function OLXStyleListings() {
 
       if (res.ok || res.status === 200 || res.status === 201) return true;
 
-      if (makeFav && (res.status === 400 || res.status === 409) && msg.includes("already")) return true;
-      if (!makeFav && (res.status === 400 || res.status === 404) && (msg.includes("not in") || msg.includes("not found")))
+      if (
+        makeFav &&
+        (res.status === 400 || res.status === 409) &&
+        msg.includes("already")
+      )
+        return true;
+      if (
+        !makeFav &&
+        (res.status === 400 || res.status === 404) &&
+        (msg.includes("not in") || msg.includes("not found"))
+      )
         return true;
 
       console.error("toggle favorite failed", res);
@@ -274,7 +300,9 @@ export default function OLXStyleListings() {
 
     if (!token && id.startsWith("mock-")) {
       const isFav = getLocalFavIds().includes(id);
-      const next = isFav ? getLocalFavIds().filter((x) => x !== id) : [id, ...getLocalFavIds()];
+      const next = isFav
+        ? getLocalFavIds().filter((x) => x !== id)
+        : [id, ...getLocalFavIds()];
       setLocalFavIds(next);
       setFavorites(next);
       window.dispatchEvent(new Event("favorites:changed"));
@@ -283,11 +311,17 @@ export default function OLXStyleListings() {
     }
 
     const ls = window.localStorage;
-    const hasAnyToken = token || ls.getItem("token") || ls.getItem("adminToken") || ls.getItem("authToken");
+    const hasAnyToken =
+      token ||
+      ls.getItem("token") ||
+      ls.getItem("adminToken") ||
+      ls.getItem("authToken");
 
     if (!hasAnyToken) {
       const currentlyFav = getLocalFavIds().includes(id);
-      const next = currentlyFav ? getLocalFavIds().filter((x) => x !== id) : [id, ...getLocalFavIds()];
+      const next = currentlyFav
+        ? getLocalFavIds().filter((x) => x !== id)
+        : [id, ...getLocalFavIds()];
       setLocalFavIds(next);
       setFavorites(next);
       window.dispatchEvent(new Event("favorites:changed"));
@@ -297,12 +331,16 @@ export default function OLXStyleListings() {
 
     const currentlyFav = favorites.includes(id);
 
-    setFavorites((prev) => (currentlyFav ? prev.filter((x) => x !== id) : [id, ...prev]));
+    setFavorites((prev) =>
+      currentlyFav ? prev.filter((x) => x !== id) : [id, ...prev],
+    );
 
     const ok = await serverToggleFavorite(id, !currentlyFav);
 
     if (!ok) {
-      setFavorites((prev) => (currentlyFav ? [id, ...prev] : prev.filter((x) => x !== id)));
+      setFavorites((prev) =>
+        currentlyFav ? [id, ...prev] : prev.filter((x) => x !== id),
+      );
       notify("Something went wrong, please try again.", "error");
       return;
     }
@@ -326,11 +364,13 @@ export default function OLXStyleListings() {
     Boolean(
       p.isPremium ||
         p.premium ||
-        (typeof p.plan === "string" && p.plan.toLowerCase().includes("premium")),
+        (typeof p.plan === "string" &&
+          p.plan.toLowerCase().includes("premium")),
     );
 
   /* -------------------------- UI helpers ------------------------ */
-  const formatPrice = (price: number) => `₹ ${Math.round(Number(price || 0)).toString()}`;
+  const formatPrice = (price: number) =>
+    `₹ ${Math.round(Number(price || 0)).toString()}`;
 
   const getTimeAgo = (iso: string) => {
     const now = new Date();
@@ -348,9 +388,11 @@ export default function OLXStyleListings() {
   const firstImage = useMemo(
     () => (p: Property) =>
       p.coverImageUrl ||
-      (typeof p.images?.[0] === "string" ? (p.images[0] as string) : (p.images?.[0] as any)?.url) ||
+      (typeof p.images?.[0] === "string"
+        ? (p.images[0] as string)
+        : (p.images?.[0] as any)?.url) ||
       "/placeholder.png",
-    []
+    [],
   );
 
   /* ---------------------------- Render -------------------------- */
@@ -359,7 +401,9 @@ export default function OLXStyleListings() {
   return (
     <div className="bg-white">
       <div className="px-4 py-4 max-w-6xl mx-auto">
-        <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">Fresh recommendations</h2>
+        <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
+          Fresh recommendations
+        </h2>
 
         {/* 🔧 changed: added lg:grid-cols-4 for desktop 4 columns */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
@@ -396,7 +440,12 @@ export default function OLXStyleListings() {
                   ) : null}
 
                   {/* watermark should not steal clicks */}
-                  <Watermark variant="badge" small text="ashishproperties.in" className="pointer-events-none" />
+                  <Watermark
+                    variant="badge"
+                    small
+                    text="ashishproperties.in"
+                    className="pointer-events-none"
+                  />
 
                   <button
                     onClick={(e) => {
@@ -408,14 +457,20 @@ export default function OLXStyleListings() {
                     aria-label="favorite"
                     title={isFav ? "Remove from wishlist" : "Save to wishlist"}
                   >
-                    <Heart className={`h-4 w-4 ${isFav ? "fill-red-500 text-red-500" : "text-gray-600"}`} />
+                    <Heart
+                      className={`h-4 w-4 ${isFav ? "fill-red-500 text-red-500" : "text-gray-600"}`}
+                    />
                   </button>
                 </div>
 
                 <div className="p-3 md:p-3.5">
-                  <div className="text-base md:text-lg font-bold text-gray-900 mb-1">{formatPrice(property.price)}</div>
+                  <div className="text-base md:text-lg font-bold text-gray-900 mb-1">
+                    {formatPrice(property.price)}
+                  </div>
 
-                  <h3 className="text-xs md:text-sm text-gray-700 mb-2 line-clamp-2 leading-tight">{property.title}</h3>
+                  <h3 className="text-xs md:text-sm text-gray-700 mb-2 line-clamp-2 leading-tight">
+                    {property.title}
+                  </h3>
 
                   <div className="flex items-center text-[11px] md:text-xs text-gray-500 mb-1">
                     <MapPin className="h-3 w-3 mr-1 flex-shrink-0" />
@@ -429,7 +484,9 @@ export default function OLXStyleListings() {
                       <Clock className="h-3 w-3 mr-1" />
                       <span>{getTimeAgo(property.createdAt)}</span>
                     </div>
-                    <span className="capitalize px-2 py-0.5 bg-gray-100 rounded">{property.propertyType}</span>
+                    <span className="capitalize px-2 py-0.5 bg-gray-100 rounded">
+                      {property.propertyType}
+                    </span>
                   </div>
 
                   <button
@@ -459,7 +516,9 @@ export default function OLXStyleListings() {
 
         {properties.length > 0 && (
           <div className="mt-6 text-center">
-            <button className="text-[#C70000] font-semibold text-sm hover:underline">View all properties</button>
+            <button className="text-[#C70000] font-semibold text-sm hover:underline">
+              View all properties
+            </button>
           </div>
         )}
       </div>

@@ -124,8 +124,8 @@ export default function About() {
                 Contact
               </h2>
               <p className="text-gray-700">
-                Call/WhatsApp: 📞 +91-9991889994 • Email: info@ashishproperties.in
-                • Office: 📌 Full address here
+                Call/WhatsApp: 📞 +91-9991889994 • Email:
+                info@ashishproperties.in • Office: 📌 Full address here
               </p>
             </section>
           </div>

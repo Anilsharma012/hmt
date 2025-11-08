@@ -264,9 +264,9 @@ export default function MyProperties() {
       }
 
       const confirmed = confirm(
-        "Are you sure you want to resubmit this property for review? Make sure you have addressed all the issues mentioned in the rejection reason."
+        "Are you sure you want to resubmit this property for review? Make sure you have addressed all the issues mentioned in the rejection reason.",
       );
-      
+
       if (!confirmed) return;
 
       const response = await api.post(
@@ -274,16 +274,20 @@ export default function MyProperties() {
         {},
         token,
       );
-      
+
       if (response.data.success) {
-        alert("Property resubmitted successfully! It will be reviewed by our team.");
+        alert(
+          "Property resubmitted successfully! It will be reviewed by our team.",
+        );
         fetchProperties();
       } else {
         alert(response.data.error || "Failed to resubmit property");
       }
     } catch (error: any) {
       console.error("Error resubmitting property:", error);
-      alert(error.message || "Network error occurred while resubmitting property");
+      alert(
+        error.message || "Network error occurred while resubmitting property",
+      );
     }
   };
 
@@ -644,11 +648,18 @@ export default function MyProperties() {
                               <>
                                 {property.rejectionReason && (
                                   <div className="text-xs text-red-600 bg-red-50 p-2 rounded">
-                                    <strong>Reason:</strong> {property.rejectionReason}
+                                    <strong>Reason:</strong>{" "}
+                                    {property.rejectionReason}
                                   </div>
                                 )}
-                                <Link to={`/post-property?edit=${property._id}`}>
-                                  <Button size="sm" variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50">
+                                <Link
+                                  to={`/post-property?edit=${property._id}`}
+                                >
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="w-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                                  >
                                     <Edit className="h-3 w-3 mr-1" />
                                     Edit & Resubmit
                                   </Button>
@@ -700,7 +711,7 @@ export default function MyProperties() {
                                   Edit Property
                                 </Link>
                               </DropdownMenuItem>
-                              
+
                               {property.approvalStatus === "rejected" && (
                                 <DropdownMenuItem
                                   onClick={() => resubmitProperty(property._id)}
