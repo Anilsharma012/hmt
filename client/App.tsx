@@ -89,6 +89,7 @@ import DynamicPage from "./pages/DynamicPage";
 import AdminSubcategoriesPage from "./pages/AdminSubcategoriesPage";
 import Checkout from "./pages/Checkout";
 import PaymentStatus from "./pages/PaymentStatus";
+import PackagesPage from "./pages/Packages";
 
 // PWA install UI ko hata diya (hum APK route use kar rahe)
  // import PWAInstallButton from "./components/PWAInstallButton";
