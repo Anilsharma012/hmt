@@ -33,23 +33,25 @@ export default function OLXStyleHeader() {
 
   useEffect(() => {
     let mounted = true;
-    const loadPending = async () => {
+    const loadCounts = async () => {
       try {
         if (!user || user.userType !== "admin") return;
-        const res = await fetch("/api/admin/properties/pending", {
+        const res = await fetch("/api/admin/notifications/counts", {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         if (!res.ok) return;
         const json = await res.json();
-        if (mounted && json && Array.isArray(json.data)) {
-          setPendingCount(json.data.length);
+        if (mounted && json && json.data) {
+          const d = json.data;
+          setPendingCount(typeof d.pendingCount === 'number' ? d.pendingCount : 0);
+          setResubmittedCount(typeof d.resubmittedCount === 'number' ? d.resubmittedCount : 0);
         }
       } catch (e) {
         // ignore
       }
     };
-    loadPending();
-    const id = setInterval(loadPending, 60_000);
+    loadCounts();
+    const id = setInterval(loadCounts, 60_000);
     return () => {
       mounted = false;
       clearInterval(id);
