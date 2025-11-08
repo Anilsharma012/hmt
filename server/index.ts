@@ -858,6 +858,12 @@ app.use("/api/payments/razorpay", requireBuyer, razorpayRoutes);
     requireAdmin,
     getPendingProperties,
   );
+  app.get(
+    "/api/admin/notifications/counts",
+    authenticateToken,
+    requireAdmin,
+    getAdminNotificationCounts,
+  );
   app.put(
     "/api/admin/properties/:propertyId/approval",
     authenticateToken,
