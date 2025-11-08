@@ -7,6 +7,8 @@ import {
   MapPin,
   Clock,
 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 import { useAuth } from "../hooks/useAuth";
 import { ROHTAK_AREAS } from "@shared/types";
 import MenuDashboard from "./MenuDashboard";
@@ -270,5 +272,3 @@ export default function OLXStyleHeader() {
     </header>
   );
 }
-
-
