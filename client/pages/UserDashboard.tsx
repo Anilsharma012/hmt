@@ -272,35 +272,50 @@ const UserDashboard = () => {
 
         {/* Basic Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-6">
-          <Card>
+          <Card
+            className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:bg-gray-50"
+            onClick={() => navigate("/account/my-ads")}
+          >
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-[#C70000] mb-1">{stats.totalProperties}</div>
               <div className="text-sm text-gray-600">Total Properties</div>
             </CardContent>
           </Card>
-          
-          <Card>
+
+          <Card
+            className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:bg-yellow-50"
+            onClick={() => navigate("/account/my-ads?status=pending")}
+          >
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-yellow-600 mb-1">{stats.pendingApproval}</div>
               <div className="text-sm text-gray-600">Pending Review</div>
             </CardContent>
           </Card>
-          
-          <Card>
+
+          <Card
+            className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:bg-green-50"
+            onClick={() => navigate("/account/my-ads?status=approved")}
+          >
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-green-600 mb-1">{stats.approved}</div>
               <div className="text-sm text-gray-600">Approved</div>
             </CardContent>
           </Card>
-          
-          <Card>
+
+          <Card
+            className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:bg-blue-50"
+            onClick={() => navigate("/account/my-ads?sort=views")}
+          >
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-blue-600 mb-1">{stats.totalViews}</div>
               <div className="text-sm text-gray-600">Total Views</div>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card
+            className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:bg-purple-50"
+            onClick={() => navigate("/account/my-ads")}
+          >
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-purple-600 mb-1">{stats.totalInquiries}</div>
               <div className="text-sm text-gray-600">Inquiries</div>
@@ -309,7 +324,7 @@ const UserDashboard = () => {
 
           <Card
             className={`cursor-pointer transition-all duration-200 ${
-              activeTab === 'notifications' ? 'border-blue-500 bg-blue-50' : 'hover:bg-gray-50'
+              activeTab === 'notifications' ? 'border-blue-500 bg-blue-50' : 'hover:shadow-lg hover:bg-gray-50'
             }`}
             onClick={() => setActiveTab('notifications')}
           >
