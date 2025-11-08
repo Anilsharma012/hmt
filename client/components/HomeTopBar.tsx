@@ -62,13 +62,6 @@ export default function HomeTopBar() {
         <span className="sr-only">ashishproperties.in</span>
       </a>
 
-      {/* Buy Packages button — small, visible on md+ */}
-      <Link to="/packages" className="fixed top-3 md:top-2 left-56 md:left-60 z-[9999]">
-        <Button size="sm" variant="secondary" className="hidden md:inline-flex">
-          Buy Packages
-        </Button>
-        <a href="/packages" className="inline-flex md:hidden text-white text-sm px-3 py-2 rounded">Buy</a>
-      </Link>
     </>
   );
 }
