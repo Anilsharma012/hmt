@@ -34,7 +34,7 @@ export default function ContactUs() {
   const { toast } = useToast();
 
   const [contactEmail, setContactEmail] = useState<string>("contact@aashishproperty.com");
-  const [contactPhone, setContactPhone] = useState<string>("+91 7419100032");
+  const [contactPhone, setContactPhone] = useState<string>("+91 9991889994");
   const [contactAddress, setContactAddress] = useState<string>("Rohtak, Haryana");
 
   const [name, setName] = useState<string>("");
