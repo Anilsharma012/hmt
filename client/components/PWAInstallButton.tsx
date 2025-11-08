@@ -168,6 +168,23 @@ export default function PWAInstallButton() {
                 Install without download
               </button>
             )}
+
+            {/* Install helper modal shown after download starts */}
+            {showInstallHelp && (
+              <div className="mt-4 p-3 bg-white rounded-md text-sm text-gray-800">
+                <div className="font-semibold mb-2">How to install the APK</div>
+                <ol className="list-decimal list-inside space-y-1">
+                  <li>Open your phone's Downloads app or Files app.</li>
+                  <li>Tap on "AashishProperty.apk" to begin installation.</li>
+                  <li>If prompted, allow "Install unknown apps" for your browser (Settings → Install unknown apps → Allow).</li>
+                  <li>After installation, open the Ashish Properties app from your launcher.</li>
+                </ol>
+                <div className="mt-3 flex gap-2">
+                  <a href="/api/app/download" className="flex-1 text-center px-3 py-2 bg-[#C70000] text-white rounded">Download again</a>
+                  <button onClick={() => setShowInstallHelp(false)} className="px-3 py-2 border rounded">Close</button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
