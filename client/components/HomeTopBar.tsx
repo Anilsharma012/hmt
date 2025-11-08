@@ -7,9 +7,6 @@ import React, { useEffect, useState } from "react";
  * - On md+ screens: badge + wordmark
  * - Falls back to text if logo image missing
  */
-import { Link } from "react-router-dom";
-import { Button } from "./ui/button";
-
 export default function HomeTopBar() {
   const [src, setSrc] = useState<string | null>(null);
   const candidates = [
