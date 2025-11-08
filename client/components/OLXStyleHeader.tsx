@@ -6,6 +6,7 @@ import {
   Bell,
   MapPin,
   Clock,
+  Package as PackageIcon,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { ROHTAK_AREAS } from "@shared/types";
