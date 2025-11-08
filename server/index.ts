@@ -306,6 +306,7 @@ import {
   downloadAPK,
   uploadAPK,
   getDownloadStats,
+  apkUploadMiddleware,
 } from "./routes/app";
 
 // Testimonials routes
