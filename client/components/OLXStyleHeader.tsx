@@ -127,13 +127,6 @@ export default function OLXStyleHeader() {
 
           {/* Actions: Heart (wishlist) to the LEFT of Bell (notifications) */}
           <div className="flex items-center gap-2">
-            {/* Buy Packages button near heart */}
-            <Link to="/packages" className="hidden md:inline-flex">
-              <Button size="sm" className="bg-white text-[#C70000] hover:opacity-95">
-                Buy Packages
-              </Button>
-            </Link>
-
             <button
               onClick={handleFavoritesClick}
               className="p-2 hover:bg-red-700 rounded-lg transition-colors text-white"
@@ -142,18 +135,24 @@ export default function OLXStyleHeader() {
               <Heart className="h-6 w-6" />
             </button>
 
-            <button
-              onClick={() => (window.location.href = "/notifications")}
-              className="relative p-2 hover:bg-red-700 rounded-lg transition-colors text-white"
-              aria-label="Notifications"
-            >
-              <Bell className="h-6 w-6" />
-              {unread > 0 && (
-                <span className="absolute -top-1 -right-1 bg-white text-[#C70000] text-xs font-bold rounded-full h-5 min-w-[1.25rem] px-1 flex items-center justify-center">
-                  {unread > 9 ? "9+" : unread}
-                </span>
+            <div className="relative">
+              <button
+                onClick={() => (window.location.href = "/notifications")}
+                className="relative p-2 hover:bg-red-700 rounded-lg transition-colors text-white"
+                aria-label="Notifications"
+              >
+                <Bell className="h-6 w-6" />
+                {unread > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-white text-[#C70000] text-xs font-bold rounded-full h-5 min-w-[1.25rem] px-1 flex items-center justify-center">
+                    {unread > 9 ? "9+" : unread}
+                  </span>
+                )}
+              </button>
+
+              {user && user.userType === "admin" && pendingCount > 0 && (
+                <span title={`${pendingCount} properties pending approval`} className="absolute -top-2 -right-7 bg-yellow-400 text-black text-xs font-semibold rounded-full h-6 min-w-[1.25rem] px-2 flex items-center justify-center">{pendingCount>9? '9+': pendingCount}</span>
               )}
-            </button>
+            </div>
           </div>
         </div>
 
