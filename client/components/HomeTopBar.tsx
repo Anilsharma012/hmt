@@ -8,6 +8,8 @@ import React, { useEffect, useState } from "react";
  * - Falls back to text if logo image missing
  */
 
+import React, { useEffect, useState } from "react";
+
 export default function HomeTopBar() {
   const [src, setSrc] = useState<string | null>(null);
   const candidates = [
