@@ -50,7 +50,7 @@ export default function PWAInstallButton() {
 
   const downloadApk = () => {
     // Primary action → APK download endpoint
-    window.location.href = "/download-apk";
+    window.location.href = "/api/app/download";
   };
 
   const installPWA = async () => {
