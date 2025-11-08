@@ -159,6 +159,7 @@ import {
   restoreProperties,
   permanentDeleteProperty,
   permanentDeleteProperties,
+  getAdminNotificationCounts,
 } from "./routes/admin";
 
 // Chat routes
@@ -306,6 +307,7 @@ import {
   downloadAPK,
   uploadAPK,
   getDownloadStats,
+  apkUploadMiddleware,
 } from "./routes/app";
 
 // Testimonials routes
@@ -647,7 +649,7 @@ export function createServer() {
 
   // Mount CSV import routes under protected admin path
   app.use("/api/admin", authenticateToken, requireAdmin, osImportRoutes);
-app.use("/api/payments/phonepe", phonepeRoutes);
+  app.use("/api/payments/phonepe", phonepeRoutes);
   // Initialize MongoDB connection
   connectToDatabase()
     .then(async () => {
@@ -686,7 +688,7 @@ app.use("/api/payments/phonepe", phonepeRoutes);
 
   // Serve uploaded files (maps, properties, etc.)
   app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
-app.use("/api/payments/razorpay", requireBuyer, razorpayRoutes);
+  app.use("/api/payments/razorpay", requireBuyer, razorpayRoutes);
 
   // Health check with database status and CORS info
   app.get("/api/ping", async (req, res) => {
@@ -855,6 +857,12 @@ app.use("/api/payments/razorpay", requireBuyer, razorpayRoutes);
     authenticateToken,
     requireAdmin,
     getPendingProperties,
+  );
+  app.get(
+    "/api/admin/notifications/counts",
+    authenticateToken,
+    requireAdmin,
+    getAdminNotificationCounts,
   );
   app.put(
     "/api/admin/properties/:propertyId/approval",
@@ -1257,15 +1265,30 @@ app.use("/api/payments/razorpay", requireBuyer, razorpayRoutes);
   );
 
   app.post("/api/admin/initialize", initializeAdmin);
-  
+
   // Watermark settings routes (protected)
-  app.get("/api/admin/watermark-settings", authenticateToken, requireAdmin, getWatermarkSettings);
-  app.post("/api/admin/watermark-settings", authenticateToken, requireAdmin, updateWatermarkSettings);
-  app.post("/api/admin/watermark-logo", authenticateToken, requireAdmin, ...uploadWatermarkLogo);
-  
+  app.get(
+    "/api/admin/watermark-settings",
+    authenticateToken,
+    requireAdmin,
+    getWatermarkSettings,
+  );
+  app.post(
+    "/api/admin/watermark-settings",
+    authenticateToken,
+    requireAdmin,
+    updateWatermarkSettings,
+  );
+  app.post(
+    "/api/admin/watermark-logo",
+    authenticateToken,
+    requireAdmin,
+    ...uploadWatermarkLogo,
+  );
+
   // Public watermark settings (read-only, for display)
   app.get("/api/watermark-settings", getWatermarkSettings);
-  
+
   app.post(
     "/api/admin/test-property",
     authenticateToken,
@@ -1318,8 +1341,18 @@ app.use("/api/payments/razorpay", requireBuyer, razorpayRoutes);
   // Coupon routes
   app.get("/api/admin/coupons", authenticateToken, requireAdmin, getAllCoupons);
   app.post("/api/admin/coupons", authenticateToken, requireAdmin, createCoupon);
-  app.put("/api/admin/coupons/:id", authenticateToken, requireAdmin, updateCoupon);
-  app.delete("/api/admin/coupons/:id", authenticateToken, requireAdmin, deleteCoupon);
+  app.put(
+    "/api/admin/coupons/:id",
+    authenticateToken,
+    requireAdmin,
+    updateCoupon,
+  );
+  app.delete(
+    "/api/admin/coupons/:id",
+    authenticateToken,
+    requireAdmin,
+    deleteCoupon,
+  );
   app.post("/api/coupons/validate", authenticateToken, validateCoupon);
   app.post("/api/coupons/record-usage", authenticateToken, recordCouponUsage);
 
@@ -1547,7 +1580,17 @@ app.use("/api/payments/razorpay", requireBuyer, razorpayRoutes);
   // App routes
   app.get("/api/app/info", getAppInfo);
   app.get("/api/app/download", downloadAPK);
-  app.post("/api/admin/app/upload", authenticateToken, requireAdmin, uploadAPK);
+  // Legacy path support: redirect to API download
+  app.get("/download-apk", (req, res) =>
+    res.redirect(302, "/api/app/download"),
+  );
+  app.post(
+    "/api/admin/app/upload",
+    authenticateToken,
+    requireAdmin,
+    apkUploadMiddleware,
+    uploadAPK,
+  );
   app.get(
     "/api/admin/app/stats",
     authenticateToken,

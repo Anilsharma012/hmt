@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Search,
   Heart,
@@ -6,6 +6,7 @@ import {
   Bell,
   MapPin,
   Clock,
+  Package as PackageIcon,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { ROHTAK_AREAS } from "@shared/types";
@@ -13,7 +14,10 @@ import MenuDashboard from "./MenuDashboard";
 import { useNotificationsUnread } from "../hooks/useNotificationsUnread";
 
 export default function OLXStyleHeader() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, token, isAuthenticated } = useAuth();
+  const [pendingCount, setPendingCount] = useState<number>(0);
+  const [resubmittedCount, setResubmittedCount] = useState<number>(0);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,6 +31,37 @@ export default function OLXStyleHeader() {
     }
   });
   const unread = useNotificationsUnread();
+
+  useEffect(() => {
+    let mounted = true;
+    const loadCounts = async () => {
+      try {
+        if (!user || user.userType !== "admin") return;
+        const res = await fetch("/api/admin/notifications/counts", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (!res.ok) return;
+        const json = await res.json();
+        if (mounted && json && json.data) {
+          const d = json.data;
+          setPendingCount(
+            typeof d.pendingCount === "number" ? d.pendingCount : 0,
+          );
+          setResubmittedCount(
+            typeof d.resubmittedCount === "number" ? d.resubmittedCount : 0,
+          );
+        }
+      } catch (e) {
+        // ignore
+      }
+    };
+    loadCounts();
+    const id = setInterval(loadCounts, 60_000);
+    return () => {
+      mounted = false;
+      clearInterval(id);
+    };
+  }, [token, user]);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(searchQuery.trim()), 250);
@@ -94,11 +129,13 @@ export default function OLXStyleHeader() {
 
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-white">Ashish Properties</div>
+            <div className="text-2xl font-bold text-white">
+              Ashish Properties
+            </div>
           </div>
 
           {/* Actions: Heart (wishlist) to the LEFT of Bell (notifications) */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             <button
               onClick={handleFavoritesClick}
               className="p-2 hover:bg-red-700 rounded-lg transition-colors text-white"
@@ -107,18 +144,48 @@ export default function OLXStyleHeader() {
               <Heart className="h-6 w-6" />
             </button>
 
+            {/* Buy Packages button next to wishlist */}
             <button
-              onClick={() => (window.location.href = "/notifications")}
-              className="relative p-2 hover:bg-red-700 rounded-lg transition-colors text-white"
-              aria-label="Notifications"
+              onClick={() => (window.location.href = "/packages")}
+              className="p-2 hover:bg-red-700 rounded-lg transition-colors text-white hidden md:inline-flex items-center gap-1"
+              aria-label="Buy Packages"
+              title="Buy Packages"
             >
-              <Bell className="h-6 w-6" />
-              {unread > 0 && (
-                <span className="absolute -top-1 -right-1 bg-white text-[#C70000] text-xs font-bold rounded-full h-5 min-w-[1.25rem] px-1 flex items-center justify-center">
-                  {unread > 9 ? "9+" : unread}
+              <PackageIcon className="h-5 w-5" />
+              <span className="text-sm hidden lg:inline">Buy Packages</span>
+            </button>
+
+            <div className="relative">
+              <button
+                onClick={() => (window.location.href = "/notifications")}
+                className="relative p-2 hover:bg-red-700 rounded-lg transition-colors text-white"
+                aria-label="Notifications"
+              >
+                <Bell className="h-6 w-6" />
+                {unread > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-white text-[#C70000] text-xs font-bold rounded-full h-5 min-w-[1.25rem] px-1 flex items-center justify-center">
+                    {unread > 9 ? "9+" : unread}
+                  </span>
+                )}
+              </button>
+
+              {user && user.userType === "admin" && resubmittedCount > 0 && (
+                <span
+                  title={`${resubmittedCount} properties resubmitted for review`}
+                  className="absolute -top-2 -right-11 bg-red-500 text-white text-xs font-semibold rounded-full h-5 min-w-[1.25rem] px-2 flex items-center justify-center"
+                >
+                  {resubmittedCount > 9 ? "9+" : resubmittedCount}
                 </span>
               )}
-            </button>
+              {user && user.userType === "admin" && pendingCount > 0 && (
+                <span
+                  title={`${pendingCount} properties pending approval`}
+                  className="absolute -top-2 -right-7 bg-yellow-400 text-black text-xs font-semibold rounded-full h-6 min-w-[1.25rem] px-2 flex items-center justify-center"
+                >
+                  {pendingCount > 9 ? "9+" : pendingCount}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -240,16 +307,28 @@ export default function OLXStyleHeader() {
             ) : (
               <div className="p-4">
                 <nav className="space-y-2 mb-8">
-                  <a href="/" className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700">
+                  <a
+                    href="/"
+                    className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700"
+                  >
                     Home
                   </a>
-                  <a href="/categories" className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700">
+                  <a
+                    href="/categories"
+                    className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700"
+                  >
                     Categories
                   </a>
-                  <a href="/post-property" className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700">
+                  <a
+                    href="/post-property"
+                    className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700"
+                  >
                     Sell
                   </a>
-                  <a href="/my-account" className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700">
+                  <a
+                    href="/my-account"
+                    className="block px-4 py-3 hover:bg-gray-100 rounded-lg text-gray-700"
+                  >
                     My Account
                   </a>
                 </nav>
@@ -270,5 +349,3 @@ export default function OLXStyleHeader() {
     </header>
   );
 }
-
-

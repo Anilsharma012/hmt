@@ -253,6 +253,63 @@ export const getUserStats: RequestHandler = async (req, res) => {
   }
 };
 
+// Get admin notification counts (pending approvals, resubmissions, reports, transfers, reviews)
+export const getAdminNotificationCounts: RequestHandler = async (req, res) => {
+  try {
+    const db = getDatabase();
+
+    const pendingCount = await db
+      .collection("properties")
+      .countDocuments({ approvalStatus: "pending" });
+
+    // Approximate resubmitted: pending properties that have been updated after creation
+    const resubmittedCount = await db.collection("properties").countDocuments({
+      approvalStatus: "pending",
+      $expr: { $gt: ["$updatedAt", "$createdAt"] },
+    });
+
+    const reportsPending = await db
+      .collection("reports")
+      .countDocuments({ status: "pending" })
+      .catch(() => 0);
+    const bankTransfersPending = await db
+      .collection("bank_transfers")
+      .countDocuments({ status: "pending" })
+      .catch(() => 0);
+    const reviewsPending = await db
+      .collection("reviews")
+      .countDocuments({ status: "pending" })
+      .catch(() => 0);
+
+    const response: ApiResponse<{
+      pendingCount: number;
+      resubmittedCount: number;
+      reportsPending: number;
+      bankTransfersPending: number;
+      reviewsPending: number;
+    }> = {
+      success: true,
+      data: {
+        pendingCount,
+        resubmittedCount,
+        reportsPending,
+        bankTransfersPending,
+        reviewsPending,
+      },
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error("Error fetching admin notification counts:", error);
+    res
+      .status(500)
+      .json({
+        success: false,
+        error: "Failed to fetch admin notification counts",
+      });
+  }
+};
+
 // Update user status (activate/deactivate)
 export const updateUserStatus: RequestHandler = async (req, res) => {
   try {

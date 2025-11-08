@@ -7,6 +7,9 @@ import React, { useEffect, useState } from "react";
  * - On md+ screens: badge + wordmark
  * - Falls back to text if logo image missing
  */
+
+import React, { useEffect, useState } from "react";
+
 export default function HomeTopBar() {
   const [src, setSrc] = useState<string | null>(null);
   const candidates = [
@@ -33,32 +36,34 @@ export default function HomeTopBar() {
   }, []);
 
   return (
-    <a
-      href="/"
-      aria-label="Ashish Properties Home"
-      // keep clear of the hamburger (≈48–56px wide)
-      className="fixed top-2 left-16 md:left-20 z-[9999] inline-flex items-center gap-2 no-underline"
-      style={{ pointerEvents: "auto" }}
-    >
-      {src ? (
-        <img
-          src={src}
-          alt="Ashish Properties"
-          className="h-8 md:h-9 w-auto select-none drop-shadow-md"
-          draggable={false}
-        />
-      ) : (
-        <span className="h-8 w-8 md:h-9 md:w-9 rounded-full bg-white/90 text-red-700 font-extrabold flex items-center justify-center shadow-sm">
-          AP
+    <>
+      <a
+        href="/"
+        aria-label="Ashish Properties Home"
+        // keep clear of the hamburger (≈48–56px wide)
+        className="fixed top-2 left-16 md:left-20 z-[9999] inline-flex items-center gap-2 no-underline"
+        style={{ pointerEvents: "auto" }}
+      >
+        {src ? (
+          <img
+            src={src}
+            alt="Ashish Properties"
+            className="hidden md:inline-block h-8 md:h-9 w-auto select-none drop-shadow-md"
+            draggable={false}
+          />
+        ) : (
+          <span className="hidden md:inline-flex h-8 w-8 md:h-9 md:w-9 rounded-full bg-white/90 text-red-700 font-extrabold flex items-center justify-center shadow-sm">
+            AP
+          </span>
+        )}
+
+        {/* wordmark only on md+ screens so mobile header clean रहे */}
+        <span className="ml-1 md:ml-2 text-white font-semibold hidden md:inline">
+          ashishproperties.in
         </span>
-      )}
 
-      {/* wordmark only on md+ screens so mobile header clean रहे */}
-      <span className="ml-1 md:ml-2 text-white font-semibold hidden md:inline">
-        ashishproperties.in
-      </span>
-
-      <span className="sr-only">ashishproperties.in</span>
-    </a>
+        <span className="sr-only">ashishproperties.in</span>
+      </a>
+    </>
   );
 }

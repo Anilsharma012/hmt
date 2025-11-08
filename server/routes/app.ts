@@ -1,7 +1,12 @@
 import { RequestHandler } from "express";
 import path from "path";
 import fs from "fs";
+import multer from "multer";
 import { ApiResponse } from "@shared/types";
+
+// Multer memory storage for APK uploads
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 200 * 1024 * 1024 } });
+export const apkUploadMiddleware = upload.single("apk");
 
 // Get app information
 export const getAppInfo: RequestHandler = async (req, res) => {
@@ -101,12 +106,29 @@ export const downloadAPK: RequestHandler = async (req, res) => {
 // Upload new APK (admin only)
 export const uploadAPK: RequestHandler = async (req, res) => {
   try {
-    // This would handle file upload using multer
-    // For now, we'll just return a success message
-    const response: ApiResponse<{ message: string }> = {
+    const file = (req as any).file;
+    if (!file) {
+      return res.status(400).json({ success: false, error: 'No file uploaded. Please send form-data with field name "apk".' });
+    }
+
+    const apkDir = path.join(process.cwd(), "public", "app");
+    try { if (!fs.existsSync(apkDir)) fs.mkdirSync(apkDir, { recursive: true }); } catch (e) { /* ignore */ }
+
+    const apkPath = path.join(apkDir, "AashishProperty.apk");
+    fs.writeFileSync(apkPath, file.buffer);
+
+    const stats = fs.statSync(apkPath);
+
+    const response: ApiResponse<{ message: string; size: number; path: string }> = {
       success: true,
-      data: { message: "APK upload functionality to be implemented with multer" },
+      data: {
+        message: "APK uploaded successfully",
+        size: stats.size,
+        path: "/app/AashishProperty.apk",
+      },
     };
+
+    console.log("APK uploaded by admin:", { ip: (req as any).ip, size: stats.size, path: apkPath });
 
     res.json(response);
   } catch (error) {
