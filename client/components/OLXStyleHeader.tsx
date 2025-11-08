@@ -15,6 +15,7 @@ import { useNotificationsUnread } from "../hooks/useNotificationsUnread";
 export default function OLXStyleHeader() {
   const { user, token, isAuthenticated } = useAuth();
   const [pendingCount, setPendingCount] = useState<number>(0);
+  const [resubmittedCount, setResubmittedCount] = useState<number>(0);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
