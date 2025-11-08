@@ -159,6 +159,7 @@ import {
   restoreProperties,
   permanentDeleteProperty,
   permanentDeleteProperties,
+  getAdminNotificationCounts,
 } from "./routes/admin";
 
 // Chat routes
