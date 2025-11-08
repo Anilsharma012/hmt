@@ -66,8 +66,20 @@ export default function PWAInstallButton() {
       }
       return;
     }
-    // Primary action → legacy download path
-    window.location.href = "/download-apk";
+
+    try {
+      // start download in same tab (server streams APK)
+      window.location.href = "/api/app/download";
+
+      // show inline instructions because silent install is not possible
+      setShowInstallHelp(true);
+
+      // log event (optional)
+      console.log("APK download started via UI");
+    } catch (e) {
+      console.error("Failed to start APK download:", e);
+      toast({ title: "Download failed", description: "Could not start APK download. Please try again." });
+    }
   };
 
   const installPWA = async () => {
