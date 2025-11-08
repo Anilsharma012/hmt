@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { X, Download } from "lucide-react";
 
-const APK_URL = "/apk/ashishproperties-v1.apk"; // <-- yahan apna actual filename/URL set karo
+const APK_URL = "/api/app/download";
 const STORAGE_KEY = "ap_download_popup_hidden";
 
 function isAndroid() {
@@ -68,7 +68,6 @@ export default function AppDownloadPopup() {
           <div className="flex gap-2">
             <a
               href={APK_URL}
-              download
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-black text-white hover:opacity-90"
             >
               <Download size={16} />
@@ -76,7 +75,7 @@ export default function AppDownloadPopup() {
             </a>
 
             <button
-              onClick={forceDownload}
+              onClick={() => { window.location.href = APK_URL; }}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50"
               title="Try alternate download"
             >
