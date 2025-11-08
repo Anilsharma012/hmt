@@ -181,6 +181,7 @@ function App() {
                   <Route path="/user-dashboard" element={<UserDashboard />} />
                   <Route path="/post-property" element={<PostProperty />} />
                   <Route path="/payment-status" element={<PaymentStatus />} />
+                  <Route path="/packages" element={<PackagesPage />} />
                   <Route
                     path="/seller"
                     element={
